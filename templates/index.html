@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yojana Setu AI</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <header>
+
+        <div class="logo-section">
+            <div class="logo-box">🏛</div>
+
+            <div>
+                <h2>Yojana Setu</h2>
+                <p>AI-powered guide to government schemes</p>
+            </div>
+        </div>
+
+        <div class="language-switch">
+            <button id="englishBtn" class="active">
+                English
+            </button>
+
+            <button id="hindiBtn">
+                हिंदी
+            </button>
+        </div>
+
+    </header>
+
+    <section class="hero">
+
+        <h1 id="hero-title">
+            Find every scheme you deserve
+        </h1>
+
+        <p id="hero-subtitle">
+            Enter your profile once. Get matched to all government benefits in seconds.
+        </p>
+        <div class="categories">
+
+            <span id="cat-farmers">Farmers</span>
+
+            <span id="cat-healthcare">Healthcare</span>
+
+            <span id="cat-business">Business</span>
+
+            <span id="cat-students">Students</span>
+
+            <span id="cat-youth">Youth</span>
+
+            <span id="cat-housing">Housing</span>
+
+            <span id="cat-women">Women & Girls</span>
+
+        </div>
+
+    </section>
+
+
+    <section class="stats">
+
+        <div>
+            <h2>12+</h2>
+            <p id="active-schemes-text">Active schemes</p>
+        </div>
+
+        <div>
+            <h2>₹5L+</h2>
+            <p id="health-cover-text">Max health cover</p>
+        </div>
+
+        <div>
+            <h2>10s</h2>
+            <p id="match-time-text">Match time</p>
+        </div>
+
+    </section>
+
+
+    <section class="features">
+
+        <div id="feature-eligibility">
+            Eligibility checker
+        </div>
+
+        <div id="feature-search">
+            Search schemes
+        </div>
+
+        <div id="feature-advisor">
+            AI advisor
+        </div>
+
+    </section>
+
+    <section class="search-section">
+
+        <h2>Search Schemes</h2>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search schemes by name or occupation..."
+            >
+
+            <button id="searchBtn">
+                Search
+            </button>
+
+        </div>
+
+    </section>
+    <section class="profile">
+
+        <h2 id="profile-title">Your profile</h2>
+
+        <form id="profileForm">
+
+            <div class="form-group">
+                <label id="age-label">Age</label>
+                <input id="age-input" type="number" placeholder="e.g. 22">
+            </div>
+
+            <div class="form-group">
+                <label id="income-label">Annual income (₹)</label>
+                <input id="income-input" type="number" placeholder="e.g. 200000">
+            </div>
+
+            <div class="form-group">
+                <label id="occupation-label">Occupation</label>
+                <select id="occupation-select">
+                    <option>Select...</option>
+                    <option>Student</option>
+                    <option>Farmer</option>
+                    <option>Business</option>
+                    <option>Employee</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label id="state-label">State</label>
+                <select id="state-select">
+                    <option>Select...</option>
+                    <option>Madhya Pradesh</option>
+                    <option>Maharashtra</option>
+                    <option>Rajasthan</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label id="gender-label">Gender</label>
+                <select id="gender-select">
+                    <option>Select...</option>
+                    <option>Male</option>
+                    <option>Female</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label id="category-label">Category</label>
+                <select id="category-select">
+                    <option>Select...</option>
+                    <option>General</option>
+                    <option>OBC</option>
+                    <option>SC</option>
+                    <option>ST</option>
+                </select>
+            </div>
+
+            <button id="find-btn" class="submit-btn">
+                Find my schemes
+            </button>
+
+        </form>
+
+    </section>
+    <section class="ai-section">
+
+    <h2>🤖 AI Scheme Advisor</h2>
+
+    <div class="ai-box">
+
+        <input
+            type="text"
+            id="aiQuestion"
+            placeholder="Ask about government schemes..."
+        >
+
+        <button id="askAiBtn">
+            Ask AI
+        </button>
+
+    </div>
+
+    <div id="aiResponse">
+
+        AI answers will appear here.
+
+    </div>
+
+</section>
+
+    <section id="results" style="display:none;">
+
+        <h2 id="results-title">Eligible Schemes</h2>
+
+        <div id="resultsContainer">
+
+            Results will appear here.
+
+        </div>
+
+    </section>
+
+    <footer>
+
+        <p>
+            Data from MyScheme, NSP, PM Kisan,
+            Ayushman Bharat & more
+        </p>
+
+        <div class="footer-links">
+            <a href="#">MyScheme</a>
+            <a href="#">NSP</a>
+            <a href="#">PMJAY</a>
+        </div>
+
+    </footer>
+
+</div>
+
+<script src="{{ url_for('static',
+filename='js/translations.js') }}"></script>
+
+<script src="{{ url_for('static',
+filename='js/app.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</body>
+</html>

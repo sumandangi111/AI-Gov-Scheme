@@ -1,0 +1,141 @@
+[
+    {
+        "name": "National Scholarship",
+        "occupation": "Student",
+        "max_income": 250000,
+        "min_age": 17,
+        "max_age": 30,
+        "gender": "Any",
+        "category": "Any",
+        "state": "Any",
+        "documents": ["Aadhaar Card", "Income Certificate", "Marksheet"],
+        "benefits": ["Scholarship up to ₹50,000"],
+        "apply_link": "https://scholarships.gov.in"
+    },
+
+    {
+        "name": "PM Kisan",
+        "occupation": "Farmer",
+        "max_income": 1000000,
+        "min_age": 18,
+        "max_age": 65,
+        "gender": "Any",
+        "category": "Any",
+        "state": "Any",
+        "documents": ["Aadhaar Card", "Land Record", "Bank Passbook"],
+        "benefits": ["₹6000 per year", "Direct Benefit Transfer"],
+        "apply_link": "https://pmkisan.gov.in"
+    },
+
+    {
+        "name": "Ayushman Bharat",
+        "occupation": "Any",
+        "max_income": 500000,
+        "min_age": 0,
+        "max_age": 100,
+        "gender": "Any",
+        "category": "Any",
+        "state": "Any",
+        "documents": ["Aadhaar Card", "Ration Card"],
+        "benefits": ["Health insurance up to ₹5 lakh"],
+        "apply_link": "https://pmjay.gov.in"
+    },
+
+    {
+        "name": "Mudra Loan",
+        "occupation": "Business",
+        "max_income": 10000000,
+        "min_age": 18,
+        "max_age": 60,
+        "gender": "Any",
+        "category": "Any",
+        "state": "Any",
+        "documents": ["Aadhaar Card", "Business Proof"],
+        "benefits": ["Business loan up to ₹10 lakh"],
+        "apply_link": "https://www.mudra.org.in"
+    },
+
+    {
+        "name": "Skill India",
+        "occupation": "Any",
+        "max_income": 10000000,
+        "min_age": 18,
+        "max_age": 45,
+        "gender": "Any",
+        "category": "Any",
+        "state": "Any",
+        "documents": ["Aadhaar Card"],
+        "benefits": ["Free skill training"],
+        "apply_link": "https://www.skillindia.gov.in"
+    },
+
+    {
+        "name": "PMEGP",
+        "occupation": "Business",
+        "max_income": 10000000,
+        "min_age": 18,
+        "max_age": 60,
+        "gender": "Any",
+        "category": "Any",
+        "state": "Any",
+        "documents": ["Aadhaar Card", "Project Report"],
+        "benefits": ["Subsidy for business setup"],
+        "apply_link": "https://www.kviconline.gov.in"
+    },
+
+    {
+        "name": "Startup India",
+        "occupation": "Business",
+        "max_income": 10000000,
+        "min_age": 18,
+        "max_age": 50,
+        "gender": "Any",
+        "category": "Any",
+        "state": "Any",
+        "documents": ["PAN Card", "Startup Registration"],
+        "benefits": ["Tax benefits", "Funding support"],
+        "apply_link": "https://www.startupindia.gov.in"
+    },
+
+    {
+        "name": "PM Awas Yojana",
+        "occupation": "Any",
+        "max_income": 600000,
+        "min_age": 18,
+        "max_age": 70,
+        "gender": "Any",
+        "category": "Any",
+        "state": "Any",
+        "documents": ["Aadhaar Card", "Income Certificate"],
+        "benefits": ["Housing subsidy"],
+        "apply_link": "https://pmaymis.gov.in"
+    },
+
+    {
+        "name": "Stand-Up India",
+        "occupation": "Business",
+        "max_income": 10000000,
+        "min_age": 18,
+        "max_age": 60,
+        "gender": "Female",
+        "category": "OBC",
+        "state": "Any",
+        "documents": ["Aadhaar Card", "Business Plan"],
+        "benefits": ["Business loan support"],
+        "apply_link": "https://www.standupmitra.in"
+    },
+
+    {
+        "name": "Sukanya Samriddhi Yojana",
+        "occupation": "Any",
+        "max_income": 10000000,
+        "min_age": 0,
+        "max_age": 10,
+        "gender": "Female",
+        "category": "Any",
+        "state": "Any",
+        "documents": ["Birth Certificate", "Aadhaar Card"],
+        "benefits": ["Savings scheme for girl child"],
+        "apply_link": "https://www.indiapost.gov.in"
+    }
+]
