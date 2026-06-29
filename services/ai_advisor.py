@@ -1,100 +1,112 @@
 import ollama
 
-from services.eligibility import find_schemes
+from rag.retrieve import retrieve_schemes
 
 
 def ask_ai(user_data):
 
-    # User question
     question = user_data["question"]
 
-    # Convert income to integer
-    user_data["income"] = int(user_data["income"])
+    # ------------------------------------
+    # Retrieve relevant schemes from ChromaDB
+    # ------------------------------------
+    retrieved_schemes = retrieve_schemes(
+        question,
+        top_k=3
+    )
 
-    # Find eligible schemes
-    eligible_schemes = find_schemes(user_data)
+    if len(retrieved_schemes) == 0:
+        return "Sorry, I couldn't find any relevant government scheme."
 
-    # No schemes found
-    if len(eligible_schemes) == 0:
+    print("\n========== RETRIEVED SCHEMES ==========\n")
 
-        return """
-Sorry, no matching schemes were found based on your profile.
+    for scheme in retrieved_schemes:
+        print(scheme["name"])
 
-Try changing income, occupation, or other details.
+    print("\n=======================================\n")
+
+    # ------------------------------------
+    # Build Context
+    # ------------------------------------
+    context = ""
+
+    for scheme in retrieved_schemes:
+
+        context += f"""
+========================================
+
+Scheme Name:
+{scheme['name']}
+
+Ministry:
+{scheme['ministry']}
+
+Official Link:
+{scheme['url']}
+
+Details:
+
+{scheme['document']}
+
 """
 
-    # Create clean scheme text
-    scheme_text = ""
-
-    for scheme in eligible_schemes:
-
-        benefits = ", ".join(
-            scheme.get("benefits", [])
-        )
-
-        documents = ", ".join(
-            scheme.get("documents", [])
-        )
-
-        scheme_text += f"""
-Scheme Name: {scheme['name']}
-
-Benefits:
-{benefits}
-
-Documents:
-{documents}
-
-"""
-
-    # Build clean prompt
+    # ------------------------------------
+    # Prompt
+    # ------------------------------------
     prompt = f"""
-You are a Government Scheme Advisor.
+You are an AI Government Scheme Advisor.
 
-User Profile:
+Answer ONLY using the information provided in the context.
 
-Age: {user_data['age']}
-Income: {user_data['income']}
-Occupation: {user_data['occupation']}
-Gender: {user_data['gender']}
-Category: {user_data['category']}
-State: {user_data['state']}
+Never use outside knowledge.
+
+If the answer is not available in the context, reply exactly:
+
+"I couldn't find that information in the available government scheme data."
+
+========================================
+
+Context:
+
+{context}
+
+========================================
 
 User Question:
+
 {question}
 
-Eligible Schemes:
-
-{scheme_text}
+========================================
 
 Instructions:
 
-- Use ONLY the provided schemes.
-- Do NOT repeat the user profile.
-- Do NOT explain your reasoning.
-- Use simple bullet points.
-- Maximum 80 words.
-- Format exactly like:
-
-Scheme: PM Kisan
-Benefits:
-• ₹6000 per year
-• Direct Benefit Transfer
-
-Documents:
-• Aadhaar Card
-• Land Record
-• Bank Passbook
+- Answer only from the given context.
+- Keep the answer short, professional, and easy to understand.
+- Use Markdown formatting.
+- Use headings and bullet points.
+- Mention only the information relevant to the user's question.
+- Do not repeat the full scheme description.
+- If the user asks about benefits, answer only the benefits.
+- If the user asks about eligibility, answer only the eligibility.
+- If the user asks about exclusions, answer only the exclusions.
+- If the user asks about the application process, answer only the application process.
+- If the user asks about required documents, mention them only if available.
+- Always include the official link at the end if available.
+- Never invent information.
 """
 
-    # Debug prompt
-    print("========== PROMPT ==========")
-    print(prompt)
-    print("============================")
-
-    # Call TinyLlama
+    # ------------------------------------
+    # Generate Response using Ollama
+    # ------------------------------------
     response = ollama.chat(
-       model="qwen2.5:1.5b",
+
+        model="qwen2.5:1.5b",
+
+        options={
+            "temperature": 0.0,
+            "num_predict": 250
+        },
+
         messages=[
             {
                 "role": "user",

@@ -1,0 +1,13 @@
+git init
+Set-Content -Path .gitignore -Value "venv/" -Encoding utf8
+cd "folder location"
+git add .
+git status
+
+
+git commit -m "message"
+git remote add origin https://github.com/repo.git
+git branch -M main
+git push -u origin main
+
+git rm -r --cached .

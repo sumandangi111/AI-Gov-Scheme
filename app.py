@@ -28,7 +28,7 @@ def search_schemes():
     keyword = data["keyword"].lower()
 
     with open(
-        "data/schemes.json",
+        "data/processed/schemes.json",
         "r",
         encoding="utf-8"
     ) as file:
@@ -40,9 +40,9 @@ def search_schemes():
     for scheme in schemes:
 
         if (
-            keyword in scheme["name"].lower()
-            or
-            keyword in scheme["occupation"].lower()
+            keyword in scheme.get("name", "").lower()
+            or keyword in scheme.get("description", "").lower()
+            or keyword in scheme.get("ministry", "").lower()
         ):
 
             results.append(scheme)
