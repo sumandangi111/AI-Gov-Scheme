@@ -7,9 +7,6 @@ def ask_ai(user_data):
 
     question = user_data["question"]
 
-    # ------------------------------------
-    # Retrieve relevant schemes from ChromaDB
-    # ------------------------------------
     retrieved_schemes = retrieve_schemes(
         question,
         top_k=3
@@ -25,15 +22,12 @@ def ask_ai(user_data):
 
     print("\n=======================================\n")
 
-    # ------------------------------------
-    # Build Context
-    # ------------------------------------
+    
     context = ""
 
     for scheme in retrieved_schemes:
 
         context += f"""
-========================================
 
 Scheme Name:
 {scheme['name']}
@@ -50,9 +44,7 @@ Details:
 
 """
 
-    # ------------------------------------
-    # Prompt
-    # ------------------------------------
+    
     prompt = f"""
 You are an AI Government Scheme Advisor.
 
@@ -95,9 +87,7 @@ Instructions:
 - Never invent information.
 """
 
-    # ------------------------------------
-    # Generate Response using Ollama
-    # ------------------------------------
+    
     response = ollama.chat(
 
         model="qwen2.5:1.5b",

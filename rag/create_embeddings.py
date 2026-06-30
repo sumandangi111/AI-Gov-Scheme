@@ -10,116 +10,172 @@ print("Loading embedding model...")
 model = SentenceTransformer("all-MiniLM-L6-v2")
 
 # ==========================================
-# Create/Open ChromaDB
+# ChromaDB
 # ==========================================
-client = chromadb.PersistentClient(
-    path="rag/vector_db"
-)
+client = chromadb.PersistentClient(path="rag/vector_db")
 
 collection = client.get_or_create_collection(
     name="government_schemes"
 )
 
 # ==========================================
-# Load All Scraped JSON Files
-# ==========================================
-print("Loading scraped schemes...")
-
-RAW_FOLDER = "data/raw"
-
-schemes = []
-
-for filename in os.listdir(RAW_FOLDER):
-
-    if filename.endswith(".json"):
-
-        filepath = os.path.join(RAW_FOLDER, filename)
-
-        with open(filepath, "r", encoding="utf-8") as file:
-
-            scheme = json.load(file)
-
-            schemes.append(scheme)
-
-print(f"{len(schemes)} scraped schemes loaded.")
-
-# ==========================================
-# Delete Old Embeddings
+# Delete old embeddings
 # ==========================================
 try:
-
     existing = collection.get()
 
     if existing["ids"]:
-
         collection.delete(ids=existing["ids"])
 
-except Exception:
+except:
     pass
 
-# ==========================================
-# Create Embeddings
-# ==========================================
-print("\nCreating embeddings...\n")
+scheme_count = 0
 
-for i, scheme in enumerate(schemes):
+# ==========================================
+# 1. Load Manual Schemes
+# ==========================================
+print("\nLoading manual schemes...")
+
+with open(
+    "data/schemes.json",
+    "r",
+    encoding="utf-8"
+) as file:
+
+    manual_schemes = json.load(file)
+
+print(f"{len(manual_schemes)} manual schemes loaded.")
+
+for scheme in manual_schemes:
 
     document = f"""
 Scheme Name:
-{scheme.get('name', '')}
+{scheme.get('name','')}
 
-Ministry:
-{scheme.get('ministry', '')}
+Occupation:
+{scheme.get('occupation','')}
 
-Description:
-{scheme.get('description', '')}
+Maximum Income:
+{scheme.get('max_income','')}
+
+Minimum Age:
+{scheme.get('min_age','')}
+
+Maximum Age:
+{scheme.get('max_age','')}
+
+Gender:
+{scheme.get('gender','')}
+
+Category:
+{scheme.get('category','')}
+
+State:
+{scheme.get('state','')}
 
 Benefits:
-{' '.join(scheme.get('benefits', []))}
+{', '.join(scheme.get('benefits',[]))}
 
-Eligibility:
-{' '.join(scheme.get('eligibility', []))}
-
-Exclusions:
-{' '.join(scheme.get('exclusions', []))}
-
-Application Process:
-{scheme.get('application_process', '')}
+Required Documents:
+{', '.join(scheme.get('documents',[]))}
 
 Official Link:
-{scheme.get('official_link', '')}
+{scheme.get('apply_link','')}
+"""
+
+    embedding = model.encode(document).tolist()
+
+    collection.add(
+        ids=[str(scheme_count)],
+        documents=[document],
+        embeddings=[embedding],
+        metadatas=[{
+            "name": scheme.get("name",""),
+            "ministry": "Government of India",
+            "url": scheme.get("apply_link","")
+        }]
+    )
+
+    print(f"✓ Added: {scheme['name']}")
+
+    scheme_count += 1
+
+# ==========================================
+# 2. Load Scraped Schemes
+# ==========================================
+print("\nLoading scraped schemes...")
+
+raw_folder = "data/raw"
+
+files = [
+    f for f in os.listdir(raw_folder)
+    if f.endswith(".json")
+]
+
+print(f"{len(files)} scraped schemes found.")
+
+for filename in files:
+
+    filepath = os.path.join(raw_folder, filename)
+
+    with open(filepath, "r", encoding="utf-8") as file:
+
+        scheme = json.load(file)
+
+    document = f"""
+Scheme Name:
+{scheme.get('name','')}
+
+Ministry:
+{scheme.get('ministry','')}
+
+Description:
+{scheme.get('description','')}
+
+Benefits:
+{' '.join(scheme.get('benefits',[]))}
+
+Eligibility:
+{' '.join(scheme.get('eligibility',[]))}
+
+Exclusions:
+{' '.join(scheme.get('exclusions',[]))}
+
+Application Process:
+{scheme.get('application_process','')}
+
+Official Link:
+{scheme.get('official_link','')}
 """
 
     embedding = model.encode(document).tolist()
 
     collection.add(
 
-        ids=[str(i)],
+        ids=[str(scheme_count)],
 
         documents=[document],
 
         embeddings=[embedding],
 
-        metadatas=[
+        metadatas=[{
 
-            {
-                "name": scheme.get("name", ""),
-                "ministry": scheme.get("ministry", ""),
-                "url": scheme.get("official_link", "")
-            }
+            "name": scheme.get("name",""),
 
-        ]
+            "ministry": scheme.get("ministry",""),
 
+            "url": scheme.get("official_link","")
+
+        }]
     )
 
-    print(f"✓ Added: {scheme.get('name', '')}")
+    print(f"✓ Added: {scheme['name']}")
 
-# ==========================================
-# Finished
-# ==========================================
+    scheme_count += 1
+
 print("\n=========================================")
 print("Embeddings Created Successfully")
 print("Collection Name : government_schemes")
-print("Database Folder : rag/vector_db")
-print(f"Total Schemes   : {len(schemes)}")
+print(f"Total Schemes   : {scheme_count}")
 print("=========================================")

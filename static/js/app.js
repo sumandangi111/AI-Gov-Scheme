@@ -269,79 +269,198 @@ form.addEventListener("submit", async (e) => {
 
 // Show Result
 
+// function displaySchemes(schemes){
+//     console.log("displaySchemes called");
+//     console.log(schemes);
+//     document.getElementById("results").style.display = "block";
+
+//     const count = schemes.length;
+
+//     document.getElementById("results-title").innerText =
+//     `${count} Eligible Scheme${count > 1 ? 's' : ''} Found`;
+
+//     setTimeout(() => {
+
+//         document.getElementById("results").scrollIntoView({
+//             behavior: "smooth",
+//             block: "start"
+//         });
+
+//     }, 100);
+
+//     const results =
+//     document.getElementById("resultsContainer");
+
+//     results.innerHTML = "";
+
+//     if(schemes.length === 0){
+
+//         results.innerHTML =
+//         "<p>No eligible schemes found.</p>";
+
+//         return;
+//     }
+
+//     schemes.forEach(scheme => {
+
+//         const benefits =
+//         scheme.benefits
+//         .map(item => `<li>${item}</li>`)
+//         .join("");
+
+//         const documents =
+//         scheme.documents
+//         .map(doc => `<li>${doc}</li>`)
+//         .join("");
+
+//         results.innerHTML += `
+//         <div class="scheme-card">
+
+//             <h3>${scheme.name}</h3>
+
+//             <h4>Benefits</h4>
+
+//             <ul>
+//                 ${benefits}
+//             </ul>
+
+//             <h4>Required Documents</h4>
+
+//             <ul>
+//                 ${documents}
+//             </ul>
+
+//             <a
+//                 href="${scheme.apply_link}"
+//                 target="_blank"
+//                 class="apply-btn">
+
+//                 Apply Now
+
+//             </a>
+
+//         </div>
+//         `;
+//     });
+// }
+
 function displaySchemes(schemes){
-    console.log("displaySchemes called");
-    console.log(schemes);
+
     document.getElementById("results").style.display = "block";
 
     const count = schemes.length;
 
     document.getElementById("results-title").innerText =
-    `${count} Eligible Scheme${count > 1 ? 's' : ''} Found`;
-
-    setTimeout(() => {
-
-        document.getElementById("results").scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-        });
-
-    }, 100);
+        `${count} Eligible Scheme${count > 1 ? "s" : ""} Found`;
 
     const results =
-    document.getElementById("resultsContainer");
+        document.getElementById("resultsContainer");
 
     results.innerHTML = "";
 
     if(schemes.length === 0){
 
         results.innerHTML =
-        "<p>No eligible schemes found.</p>";
+            "<p>No schemes found.</p>";
 
         return;
     }
 
     schemes.forEach(scheme => {
 
-        const benefits =
-        scheme.benefits
-        .map(item => `<li>${item}</li>`)
-        .join("");
+        // OLD JSON (eligibility checker)
+        if(scheme.documents){
 
-        const documents =
-        scheme.documents
-        .map(doc => `<li>${doc}</li>`)
-        .join("");
+            const benefits =
+                (scheme.benefits || [])
+                .map(item => `<li>${item}</li>`)
+                .join("");
 
-        results.innerHTML += `
-        <div class="scheme-card">
+            const documents =
+                (scheme.documents || [])
+                .map(doc => `<li>${doc}</li>`)
+                .join("");
 
-            <h3>${scheme.name}</h3>
+            results.innerHTML += `
 
-            <h4>Benefits</h4>
+            <div class="scheme-card">
 
-            <ul>
-                ${benefits}
-            </ul>
+                <h3>${scheme.name}</h3>
 
-            <h4>Required Documents</h4>
+                <h4>Benefits</h4>
 
-            <ul>
-                ${documents}
-            </ul>
+                <ul>${benefits}</ul>
 
-            <a
-                href="${scheme.apply_link}"
-                target="_blank"
-                class="apply-btn">
+                <h4>Required Documents</h4>
 
-                Apply Now
+                <ul>${documents}</ul>
 
-            </a>
+                <a href="${scheme.apply_link}"
+                   target="_blank"
+                   class="apply-btn">
 
-        </div>
-        `;
+                    Apply Now
+
+                </a>
+
+            </div>
+
+            `;
+
+        }
+
+        // SCRAPED JSON (search)
+        else{
+
+            const benefits =
+                (scheme.benefits || [])
+                .map(item => `<li>${item}</li>`)
+                .join("");
+
+            const eligibility =
+                (scheme.eligibility || [])
+                .map(item => `<li>${item}</li>`)
+                .join("");
+
+            results.innerHTML += `
+
+            <div class="scheme-card">
+
+                <h3>${scheme.name}</h3>
+
+                <p><b>Ministry:</b> ${scheme.ministry || "N/A"}</p>
+
+                <p>${scheme.description || ""}</p>
+
+                <h4>Benefits</h4>
+
+                <ul>${benefits}</ul>
+
+                <h4>Eligibility</h4>
+
+                <ul>${eligibility}</ul>
+
+                <a href="${scheme.official_link}"
+                   target="_blank"
+                   class="apply-btn">
+
+                    Official Website
+
+                </a>
+
+            </div>
+
+            `;
+        }
+
     });
+    setTimeout(() => {
+        document.getElementById("results").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }, 100);
+
 }
     document
     .getElementById("searchBtn")
@@ -373,6 +492,7 @@ function displaySchemes(schemes){
         displaySchemes(data);
         
     });
+
 
 document
 .getElementById("askAiBtn")
